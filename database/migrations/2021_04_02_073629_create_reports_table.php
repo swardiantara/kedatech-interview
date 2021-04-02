@@ -17,7 +17,7 @@ class CreateReportsTable extends Migration
             $table->foreignId('reporter_id')->constrained('users');
             $table->enum('type', ['feedback', 'bug']);
             $table->text('description');
-            $table->foreignId('reported_id')->constrained('users')->nullable();
+            // $table->foreignId('reported_id')->constrained('users')->nullable();
             $table->timestamps();
         });
     }

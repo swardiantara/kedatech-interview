@@ -203,10 +203,10 @@ class StaffController extends Controller
             $customer->delete();
 
             return response()->json([
-                "code" => 204,
+                "code" => 200,
                 "status" => "success",
                 "message" => "customer deleted successfully"
-            ], 204);
+            ], 200);
         } catch (\Throwable $th) {
             abort(
                 response()->json([

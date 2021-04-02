@@ -42,11 +42,11 @@ Route::group([
 ], function() {
     Route::get('', [StaffController::class, 'getAllCustomers']);
     Route::delete('{userId}', [StaffController::class, 'deleteCustomer']);
-    Route::get('conversation/{receiverId}', [CustomerController::class, 'conversationWith']);
+    Route::get('conversation/{receiverId}', [UserController::class, 'conversationWith']);
 });
 
 Route::group([
     'prefix' => 'staff'
 ], function() {
-    Route::get('conversation/{receiverId}', [StaffController::class, 'conversationWith']);
+    Route::get('conversation/{receiverId}', [UserController::class, 'conversationWith']);
 });

@@ -65,4 +65,45 @@ class UserController extends Controller
             );
         }
     }
+
+    public function conversationWith($receiverId) {
+        try {
+            $sender = $this->authUser();
+
+            $receiver = User::find($receiverId);
+
+            if(!$receiver) {
+                return response()->json([
+                    "code" => 404,
+                    "status" => "fail",
+                    "message" => "Receiver user not found",
+                ], 404);
+            }
+            $conversation = Message::whereIn('sender_id', [$sender->id, (int)$receiverId])->WhereIn('receiver_id', [$sender->id, (int)$receiverId])->orderByDesc('created_at')->get();
+
+            if($conversation->isEmpty()) {
+                return response()->json([
+                    "code" => 404,
+                    "status" => "fail",
+                    "message" => "no messages found",
+                ], 404);
+            }
+
+            return response()->json([
+                "code" => 200,
+                "status" => "success",
+                "message" => "Messages data found",
+                "data" => $conversation
+            ], 200);
+
+        } catch (\Throwable $th) {
+            abort(
+                response()->json([
+                    "code" => 500,
+                    "status" => "error",
+                    "message" => "Internal Server Error"
+                ], 500)
+            );
+        }
+    }
 }

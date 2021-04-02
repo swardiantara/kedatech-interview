@@ -55,36 +55,46 @@ class CustomerController extends Controller
     //     }
     // }
 
-    public function conversationWith($receiverId) {
-        try {
-            $sender = $this->authUser();
-            $conversation = Message::whereIn('sender_id', [$sender->id, (int)$receiverId])->WhereIn('receiver_id', [$sender->id, (int)$receiverId])->orderByDesc('created_at')->get();
+    // public function conversationWith($receiverId) {
+    //     try {
+    //         $sender = $this->authUser();
 
-            if($conversation->isEmpty()) {
-                return response()->json([
-                    "code" => 404,
-                    "status" => "fail",
-                    "message" => "no messages found",
-                ], 404);
-            }
+    //         $receiver = User::find($receiverId);
 
-            return response()->json([
-                "code" => 200,
-                "status" => "success",
-                "message" => "Messages data found",
-                "data" => $conversation
-            ], 200);
+    //         if(!$receiver) {
+    //             return response()->json([
+    //                 "code" => 404,
+    //                 "status" => "fail",
+    //                 "message" => "Receiver user not found",
+    //             ], 404);
+    //         }
+    //         $conversation = Message::whereIn('sender_id', [$sender->id, (int)$receiverId])->WhereIn('receiver_id', [$sender->id, (int)$receiverId])->orderByDesc('created_at')->get();
 
-        } catch (\Throwable $th) {
-            abort(
-                response()->json([
-                    "code" => 500,
-                    "status" => "error",
-                    "message" => "Internal Server Error"
-                ], 500)
-            );
-        }
-    }
+    //         if($conversation->isEmpty()) {
+    //             return response()->json([
+    //                 "code" => 404,
+    //                 "status" => "fail",
+    //                 "message" => "no messages found",
+    //             ], 404);
+    //         }
+
+    //         return response()->json([
+    //             "code" => 200,
+    //             "status" => "success",
+    //             "message" => "Messages data found",
+    //             "data" => $conversation
+    //         ], 200);
+
+    //     } catch (\Throwable $th) {
+    //         abort(
+    //             response()->json([
+    //                 "code" => 500,
+    //                 "status" => "error",
+    //                 "message" => "Internal Server Error"
+    //             ], 500)
+    //         );
+    //     }
+    // }
 
     public function createReport(Request $request) {
         try {
@@ -97,10 +107,10 @@ class CustomerController extends Controller
             ]);
 
             return response()->json([
-                'code' => 204,
+                'code' => 201,
                 'message' => 'report created successfully',
                 'result' => $newReport
-            ], 204);
+            ], 201);
 
         } catch (\Throwable $th) {
             abort(

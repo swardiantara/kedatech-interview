@@ -14,6 +14,7 @@ class CreateReportsTable extends Migration
     public function up()
     {
         Schema::create('reports', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('reporter_id')->constrained('users');
             $table->enum('type', ['feedback', 'bug']);
             $table->text('description');

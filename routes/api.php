@@ -2,8 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\StaffController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\StaffController;
+use App\Http\Controllers\Api\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,22 +19,34 @@ use App\Http\Controllers\StaffController;
 */
 
 Route::group(['prefix' => 'auth'], function () {
-    Route::post('register', 'AuthController@register');
-    Route::post('login', 'AuthController@login');
-    
-    Route::get('userList','AuthController@getUserList');
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('logout', [AuthController::class, 'logout'])->middleware('jwt.verify');
 });
 
-Route::group(['prefix' => 'customer'], function() {
-    Route::get('', [StaffController::class, 'getCustomer']);
+Route::group([
+    "prefix" => "messages",
+], function() {
+    Route::post('', [UserController::class, 'sendMessage']); //oke 5 testcase
+    Route::get('', [StaffController::class, 'getAllMessages']);
+});
+
+Route::group([
+    "prefix" => "reports",
+], function() {
+    Route::post('', [CustomerController::class, 'createReport']);
+    Route::get('', [StaffController::class, 'getAllReports']);
+});
+
+Route::group([
+    'prefix' => 'customers',
+], function() {
+    Route::get('', [StaffController::class, 'getAllCustomers']);
     Route::delete('{userId}', [StaffController::class, 'deleteCustomer']);
-    Route::post('message', [CustomerController::class, 'sendMessage']);
-    Route::post('report', [CustomerController::class, 'createReport']);
-    Route::get('{receiverId}/conversation', [CustomerController::class, 'conversationWith']);
+    Route::get('conversation/{receiverId}', [CustomerController::class, 'conversationWith']);
 });
 
-Route::group(['prefix' => 'staff'], function() {
-    Route::post('message', [StaffController::class, 'sendMessage']);
-    Route::get('message', [StaffController::class, 'getAllMessages']);
-    Route::get('{receiverId}/conversation', [StaffController::class, 'conversationWith']);
+Route::group([
+    'prefix' => 'staff'
+], function() {
+    Route::get('conversation/{receiverId}', [StaffController::class, 'conversationWith']);
 });

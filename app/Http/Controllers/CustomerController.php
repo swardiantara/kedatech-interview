@@ -9,7 +9,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
-{
+{   
+    public function __construct() {
+        $this->middleware('auth:api');
+    }
+    
     public function sendMessage(Request $request) {
         try {
             $sender_id = 1;

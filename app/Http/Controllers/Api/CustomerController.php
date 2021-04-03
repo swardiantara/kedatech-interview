@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Message;
 use App\Models\Report;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
 {
@@ -99,6 +100,27 @@ class CustomerController extends Controller
     public function createReport(Request $request) {
         try {
             $reporter = $this->authUser();
+
+            if($reporter->user_type_id !=1) {
+                
+            }
+
+            $validator = Validator::make($request->all(), [
+                "type" => "required|in:feedback,bug",
+                "description" => "required|string"
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    "code" => 400,
+                    "status" => "fail",
+                    "message" => $validator->errors(),
+                    "data" => [
+                        'type' => $request->type,
+                        'description' => $request->description,
+                    ]
+                ], 400);
+            }
 
             $newReport = Report::create([
                 'reporter_id' => $reporter->id,

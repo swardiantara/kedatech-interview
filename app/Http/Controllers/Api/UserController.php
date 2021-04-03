@@ -70,6 +70,14 @@ class UserController extends Controller
         try {
             $sender = $this->authUser();
 
+            if($sender->id == $receiverId) {
+                return response()->json([
+                    "code" => 400,
+                    "status" => "fail",
+                    "message" => "Receiver's and sender's id are the same",
+                ], 400);
+            }
+
             $receiver = User::find($receiverId);
 
             if(!$receiver) {

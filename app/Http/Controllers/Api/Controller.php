@@ -25,7 +25,7 @@ class Controller extends BaseController
     public function authUser() {
         try {
             $user = auth()->userOrFail();
-            if (!$user = JWTAuth::parseToken()->authenticate()) {
+            if (!$user) {
                 return response()->json([
                     "code" => 404,
                     "status" => "fail",
